@@ -10,6 +10,7 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
         build_type: [Debug, Release]
         platform: [x86_64, x86]
+        ssl: ['True', 'False']
         exclude:
           - os: macos-latest
             platform: x86
@@ -22,10 +23,11 @@ jobs:
         with:
           python-version: ">= 3.5"
       - run: python -m pip install --upgrade pip conan gitpython
+        shell: bash
       - run: |
           cd recipes/quickfix
           conan export .
           cd test_package
           conan source .
-          conan test -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} . quickfix/1.15.1 --build=missing
+          conan test -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} . quickfix/1.15.1 --build=missing
         shell: bash
