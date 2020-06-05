@@ -31,3 +31,5 @@ jobs:
           conan source .
           conan test -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} . quickfix/1.15.1 --build=missing
         shell: bash
+        env:
+          CONAN_REQUEST_TIMEOUT: 120
