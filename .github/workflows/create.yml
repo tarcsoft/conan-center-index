@@ -11,9 +11,14 @@ jobs:
         build_type: [Debug, Release]
         platform: [x86_64, x86]
         ssl: ['True', 'False']
+        cppstd: [98, 11, 14, 17]
         exclude:
           - os: macos-latest
             platform: x86
+          - os: windows-latest
+            cppstd: 98
+          - os: windows-latest
+            cppstd: 11
 
     steps:
       - run: sudo apt-get install g++-multilib
@@ -32,7 +37,7 @@ jobs:
         shell: bash
       - run: |
           cd recipes/quickfix/1.15.1
-          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} . --build=missing
+          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . --build=missing
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
