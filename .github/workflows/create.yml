@@ -12,6 +12,15 @@ jobs:
         platform: [x86_64, x86]
         ssl: ['True', 'False']
         cppstd: [98, 11, 14, 17]
+        include:
+          - os: windows-latest
+            runtime: MT
+          - os: windows-latest
+            runtime: MTd
+          - os: windows-latest
+            runtime: MD
+          - os: windows-latest
+            runtime: MDd
         exclude:
           - os: macos-latest
             platform: x86
@@ -38,6 +47,14 @@ jobs:
       - run: |
           cd recipes/quickfix/1.15.1
           conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . --build=missing
+        if: ${{ success() && matrix.os != 'windows-latest' }}
+        shell: bash
+        env:
+          CONAN_REQUEST_TIMEOUT: 120
+      - run: |
+          cd recipes/quickfix/1.15.1
+          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} -s compiler.runtime=${{ matrix.runtime }} . --build=missing
+        if: ${{ success() && matrix.os == 'windows-latest' }}
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
