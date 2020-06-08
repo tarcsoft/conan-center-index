@@ -14,12 +14,16 @@ jobs:
         cppstd: [98, 11, 14, 17]
         include:
           - os: windows-latest
+            build_type: Release
             runtime: MT
           - os: windows-latest
+            build_type: Debug
             runtime: MTd
           - os: windows-latest
+            build_type: Release
             runtime: MD
           - os: windows-latest
+            build_type: Debug
             runtime: MDd
         exclude:
           - os: macos-latest
@@ -45,15 +49,17 @@ jobs:
           conan config set hooks.conan-center
         shell: bash
       - run: |
-          cd recipes/quickfix/1.15.1
-          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . --build=missing
+          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ssl: ${{ matrix.ssl }} ${{ matrix.cppstd }}
+          cd recipes/quickfix/all
+          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . quickfix/1.15.1@ --build=missing
         if: ${{ success() && matrix.os != 'windows-latest' }}
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
       - run: |
-          cd recipes/quickfix/1.15.1
-          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} -s compiler.runtime=${{ matrix.runtime }} . --build=missing
+          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ssl: ${{ matrix.ssl }} ${{ matrix.cppstd }} ${{ matrix.runtime }}
+          cd recipes/quickfix/all
+          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} -s compiler.runtime=${{ matrix.runtime }} . quickfix/1.15.1@ --build=missing
         if: ${{ success() && matrix.os == 'windows-latest' }}
         shell: bash
         env:
