@@ -1,4 +1,4 @@
-name: create
+name: create windows
 
 on: [push, pull_request]
 
@@ -7,14 +7,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [windows-latest]
         build_type: [Debug, Release]
         platform: [x86_64, x86]
         ssl: ['True', 'False']
-        cppstd: [98, 11, 14, 17]
+        cppstd: [14, 17]
+        runtime: [MT, MD, MTd, MDd]
         exclude:
-          - os: macos-latest
-            platform: x86
+          - build_type: Release
+            runtime: MTd
+          - build_type: Release
+            runtime: MDd
+          - build_type: Debug
+            runtime: MT
+          - build_type: Debug
+            runtime: MD
 
     steps:
       - run: sudo apt-get install g++-multilib
@@ -32,9 +39,9 @@ jobs:
           conan config set hooks.conan-center
         shell: bash
       - run: |
-          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ssl: ${{ matrix.ssl }} ${{ matrix.cppstd }}
+          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ssl: ${{ matrix.ssl }} ${{ matrix.cppstd }} ${{ matrix.runtime }}
           cd recipes/quickfix/all
-          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . quickfix/1.15.1@ --build=missing
+          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} -s compiler.runtime=${{ matrix.runtime }} . quickfix/1.15.1@ --build=missing
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
