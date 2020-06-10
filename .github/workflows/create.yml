@@ -34,7 +34,7 @@ jobs:
       - run: |
           echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ssl: ${{ matrix.ssl }} ${{ matrix.cppstd }}
           cd recipes/quickfix/all
-          conan create -o ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . quickfix/1.15.1@ --build=missing
+          conan create -o quickfix:ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . quickfix/1.15.1@ --build=missing
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
