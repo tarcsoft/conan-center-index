@@ -10,9 +10,10 @@ jobs:
         os: [windows-latest]
         build_type: [Debug, Release]
         platform: [x86_64, x86]
-        ssl: ['True', 'False']
         cppstd: [14, 17]
         runtime: [MT, MD, MTd, MDd]
+        ssl: ['True', 'False']
+        postgres: ['True', 'False']
         exclude:
           - build_type: Release
             runtime: MTd
@@ -39,9 +40,9 @@ jobs:
           conan config set hooks.conan-center
         shell: bash
       - run: |
-          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ssl: ${{ matrix.ssl }} ${{ matrix.cppstd }} ${{ matrix.runtime }}
+          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} with_ssl: ${{ matrix.ssl }} with_postgres: ${{ matrix.postgres }} ${{ matrix.cppstd }} ${{ matrix.runtime }}
           cd recipes/quickfix/all
-          conan create -o quickfix:ssl=${{ matrix.ssl }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} -s compiler.runtime=${{ matrix.runtime }} . quickfix/1.15.1@ --build=missing
+          conan create -o quickfix:with_ssl=${{ matrix.ssl }} -o quickfix:with_postgres=${{ matrix.postgres }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} -s compiler.runtime=${{ matrix.runtime }} . quickfix/1.15.1@ --build=missing
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
