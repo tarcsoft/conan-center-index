@@ -19,6 +19,8 @@ jobs:
             platform: x86
           - mysql: 'libmysqlclient'
             cppstd: 98
+          - mysql: 'libmysqlclient'
+            cppstd: 11
 
     steps:
       - run: sudo apt-get install g++-multilib
