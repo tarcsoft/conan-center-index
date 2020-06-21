@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [windows-latest]
         build_type: [Debug, Release]
-        platform: [x86_64, x86]
+        platform: [x86_64]
         cppstd: [14, 17]
         runtime: [MT, MD, MTd, MDd]
         ssl: ['True', 'False']
