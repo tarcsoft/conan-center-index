@@ -16,6 +16,8 @@ jobs:
         postgres: ['True', 'False']
         mysql: ['libmysqlclient']
         exclude:
+          - mysql: 'libmysqlclient'
+            cppstd: 17
           - build_type: Release
             runtime: MTd
           - build_type: Release
