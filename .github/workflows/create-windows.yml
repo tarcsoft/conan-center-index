@@ -14,7 +14,7 @@ jobs:
         runtime: [MT, MD, MTd, MDd]
         ssl: ['True', 'False']
         postgres: ['True', 'False']
-        mysql: ['None', 'libmysqlclient']
+        mysql: ['None']
         exclude:
           - build_type: Release
             runtime: MTd

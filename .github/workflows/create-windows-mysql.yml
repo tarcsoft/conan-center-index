@@ -1,0 +1,49 @@
+name: create windows mysql
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+        build_type: [Debug, Release]
+        platform: [x86_64, x86]
+        cppstd: [14, 17]
+        runtime: [MT, MD, MTd, MDd]
+        ssl: ['True', 'False']
+        postgres: ['True', 'False']
+        mysql: ['libmysqlclient']
+        exclude:
+          - build_type: Release
+            runtime: MTd
+          - build_type: Release
+            runtime: MDd
+          - build_type: Debug
+            runtime: MT
+          - build_type: Debug
+            runtime: MD
+
+    steps:
+      - run: sudo apt-get install g++-multilib
+        if: ${{ success() && matrix.os == 'ubuntu-latest' }}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ">= 3.5"
+      - run: python -m pip install --upgrade pip conan gitpython
+        shell: bash
+      - run: |
+          conan config install https://github.com/conan-io/hooks.git
+          conan config set hooks.conan-center
+        shell: bash
+      - run: |
+          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} with_mysql: ${{ matrix.mysql }} with_ssl: ${{ matrix.ssl }} with_postgres: ${{ matrix.postgres }} ${{ matrix.cppstd }} ${{ matrix.runtime }}
+          cd recipes/quickfix/all
+          conan create -o quickfix:with_mysql=${{ matrix.mysql }} -o quickfix:with_ssl=${{ matrix.ssl }} -o quickfix:with_postgres=${{ matrix.postgres }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} -s compiler.runtime=${{ matrix.runtime }} . quickfix/1.15.1@ --build quickfix --build missing
+        shell: bash
+        env:
+          CONAN_REQUEST_TIMEOUT: 120
