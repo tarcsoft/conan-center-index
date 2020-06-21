@@ -17,6 +17,8 @@ jobs:
         exclude:
           - os: macos-latest
             platform: x86
+          - mysql: 'libmysqlclient'
+            cppstd: 98
 
     steps:
       - run: sudo apt-get install g++-multilib
