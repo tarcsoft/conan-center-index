@@ -11,7 +11,8 @@ class ClnConan(ConanFile):
     topics = "cln", "cln"
     homepage = "https://github.com/OSGeo/gdal"
     url = "https://github.com/conan-io/conan-center-index"
-    # generators = "pkg_config"
+    generators = "pkg_config"
+    requires = "gmp/6.2.0"
     settings = "os", "arch", "compiler", "build_type"
     options = {
         "shared": [True, False],
