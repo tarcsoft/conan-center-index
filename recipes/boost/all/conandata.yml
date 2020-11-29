@@ -1,4 +1,10 @@
 sources:
+  1.66.0:
+    url: [
+      "https://dl.bintray.com/boostorg/release/1.66.0/source/boost_1_66_0.tar.bz2",
+      "https://sourceforge.net/projects/boost/files/boost/1.66.0/boost_1_66_0.tar.bz2",
+    ]
+    sha256: "5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9"
   1.69.0:
     url: [
       "https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2",
