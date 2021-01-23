@@ -14,6 +14,8 @@ jobs:
         shared: ['True', 'False']
 
     steps:
+      - run: sudo apt-get install g++-multilib
+        if: ${{ success() }}
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
