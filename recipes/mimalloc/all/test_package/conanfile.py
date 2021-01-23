@@ -29,7 +29,13 @@ class MimallocTestConan(ConanFile):
              self.options["mimalloc"].override and \
              self.options["mimalloc"].shared and \
              self.options["mimalloc"].inject:
-            self._test_files = []
+            self._test_files = ["no_changes"]
+
+        # Macos non injected dynamic override:
+        elif self.settings.os == "Macos" and \
+             self.options["mimalloc"].override and \
+             self.options["mimalloc"].shared and \
+            self._test_files = ["no_changes"]
 
         # Unix-like non injected override:
         else:
