@@ -25,6 +25,8 @@ jobs:
       - run: |
           conan config install https://github.com/conan-io/hooks.git
           conan config set hooks.conan-center
+          conan profile new --detect default
+          conan profile update settings.compiler.libcxx=libstdc++11 default
         shell: bash
       - run: |
           echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ${{ matrix.cppstd }}, shared: ${{ matrix.shared }}
