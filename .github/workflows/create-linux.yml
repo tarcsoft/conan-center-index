@@ -29,7 +29,7 @@ jobs:
       - run: |
           echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ${{ matrix.cppstd }}, shared: ${{ matrix.shared }}
           cd recipes/mimalloc/all
-          conan create -o mimalloc:shared=${{ matrix.shared }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . mimalloc/1.67.0@ --build=mimalloc --build=missing
+          conan create -o mimalloc:shared=${{ matrix.shared }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . mimalloc/1.6.7@ --build=mimalloc --build=missing
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
