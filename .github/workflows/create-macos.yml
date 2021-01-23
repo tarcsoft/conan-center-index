@@ -42,3 +42,4 @@ jobs:
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
+          CONAN_PRINT_RUN_COMMANDS: 1

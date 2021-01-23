@@ -15,11 +15,21 @@ jobs:
         override: ['True', 'False']
         secure: ['True', 'False']
         single_object: ['True', 'False']
+        inject: [false]
         exclude:
           - shared: 'True'
             single_object: 'True'
           - override: 'False'
             single_object: 'True'
+        include:
+          - os: ubuntu-latest
+            build_type: Debug
+            platform: x86_64
+            cppstd: 17
+            shared: 'True'
+            override: 'True'
+            secure: 'False'
+            inject: true
 
     steps:
       - run: |
@@ -41,9 +51,20 @@ jobs:
           conan profile update settings.compiler.libcxx=libstdc++11 default
         shell: bash
       - run: |
+          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ${{ matrix.cppstd }}, shared: ${{ matrix.shared }}, override: ${{ matrix.override }}, secure: ${{ matrix.secure }}, inject: ${{ matrix.inject }}
+          cd recipes/mimalloc/all
+          conan create -o mimalloc:inject=True -o mimalloc:secure=${{ matrix.secure }} -o mimalloc:override=${{ matrix.override }} -o mimalloc:shared=${{ matrix.shared }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . mimalloc/1.6.7@ --build=mimalloc --build=missing
+        shell: bash
+        env:
+          CONAN_REQUEST_TIMEOUT: 120
+          CONAN_PRINT_RUN_COMMANDS: 1
+        if: ${{ matrix.inject }}
+      - run: |
           echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ${{ matrix.cppstd }}, shared: ${{ matrix.shared }}, override: ${{ matrix.override }}, secure: ${{ matrix.secure }}, single_object: ${{ matrix.single_object }}
           cd recipes/mimalloc/all
           conan create -o mimalloc:single_object=${{ matrix.single_object }} -o mimalloc:secure=${{ matrix.secure }} -o mimalloc:override=${{ matrix.override }} -o mimalloc:shared=${{ matrix.shared }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . mimalloc/1.6.7@ --build=mimalloc --build=missing
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
+          CONAN_PRINT_RUN_COMMANDS: 1
+        if: ${{ ! matrix.inject }}

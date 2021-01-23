@@ -196,6 +196,8 @@ class MimallocConan(ConanFile):
         else:
             self.cpp_info.libs = tools.collect_libs(self)
 
+        self.output.warn(f"self.cpp_info.libs: {self.cpp_info.libs}")
+
         if self.settings.os == "Linux":
             self.cpp_info.system_libs.append("pthread")
         if not self.options.shared:
