@@ -119,6 +119,7 @@ class MimallocConan(ConanFile):
         self._cmake.definitions["MI_BUILD_STATIC"] = not self.options.shared
         self._cmake.definitions["MI_BUILD_OBJECT"] = self.options.get_safe("single_object", False)
         self._cmake.definitions["MI_OVERRIDE"] = "ON" if self.options.override else "OFF"
+        self._cmake.definitions["MI_OSX_ZONE"] = "ON" if (self.options.override and self.options.shared and self.settings.os == "Macos") else "OFF"
         self._cmake.definitions["MI_SECURE"] = "ON" if self.options.secure else "OFF"
         self._cmake.configure(build_folder=self._build_subfolder)
         return self._cmake
