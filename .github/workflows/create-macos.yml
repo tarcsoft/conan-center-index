@@ -13,6 +13,7 @@ jobs:
         cppstd: [17]
         shared: ['True', 'False']
         override: ['True', 'False']
+        secure: ['True', 'False']
 
     steps:
       - uses: actions/checkout@v2
@@ -29,9 +30,9 @@ jobs:
           conan profile new --detect default
         shell: bash
       - run: |
-          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ${{ matrix.cppstd }}, shared: ${{ matrix.shared }}, override: ${{ matrix.override }}
+          echo ${{ matrix.os }} ${{ matrix.build_type }} ${{ matrix.platform }} ${{ matrix.cppstd }}, shared: ${{ matrix.shared }}, override: ${{ matrix.override }}, secure: ${{ matrix.secure }}
           cd recipes/mimalloc/all
-          conan create -o mimalloc:override=${{ matrix.override }} -o mimalloc:shared=${{ matrix.shared }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . mimalloc/1.6.7@ --build=mimalloc --build=missing
+          conan create -o mimalloc:secure=${{ matrix.secure }} -o mimalloc:override=${{ matrix.override }} -o mimalloc:shared=${{ matrix.shared }} -s build_type=${{ matrix.build_type }} -s arch=${{ matrix.platform }} -s compiler.cppstd=${{ matrix.cppstd }} . mimalloc/1.6.7@ --build=mimalloc --build=missing
         shell: bash
         env:
           CONAN_REQUEST_TIMEOUT: 120
